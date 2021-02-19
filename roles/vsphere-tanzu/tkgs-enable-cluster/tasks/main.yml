@@ -1,5 +1,5 @@
 ---
-- name: Gather all registered virtual machines
+- name: Extract haproxy VM extra config
   community.vmware.vmware_guest_info:
     hostname: "{{ nested_vcenter.ip }}"
     username: "{{ nested_vcenter.username }}" 
@@ -7,16 +7,28 @@
     validate_certs: false
     datacenter: "{{ nested_vcenter.datacenter }}"
     name: tkgs-haproxy
-    show_extra_config: true
+    properties:
+      - config.extraConfig
+    schema: vsphere
   delegate_to: localhost
   register: vminfo
 
+- name: Extra certificate from haproxy output
+  set_fact:
+    haproxy_ca_cert_raw: >-
+      {
+      {% for item in vminfo.instance.config.extraConfig %}
+      {% if item.key == "guestinfo.dataplaneapi.cacert" %}
+      "public_key": "{{ item.value }}",
+      {% endif %}
+      {% endfor %}
+      }
+
 - name: Decode haproxy CA Cert
   set_fact:
-    haproxy_ca_cert: "{{ vminfo.instance.extra_config['guestinfo.dataplaneapi.cacert'] | b64decode }}"
+    haproxy_ca_cert: "{{ haproxy_ca_cert_raw.public_key | b64decode }}"
 
-
-- debug: var="{{ tkgs }}"
+- debug: var=tkgs
 
 - name: Create vsphere namespace cluster
   vsphere_tanzu_cluster_enable:
@@ -39,6 +51,7 @@
     management_gateway: "{{ tkgs.management_gateway }}"
     management_starting_address: "{{ tkgs.management_starting_address }}"
     management_netmask: "{{ tkgs.management_netmask }}"
+    network_provider: "{{ tkgs.network_provider }}"
     ntp_servers: "{{ tkgs.ntp_server_list }}"
     workload_gateway: "{{ tkgs.workload_gateway }}"
     workload_portgroup: "{{ tkgs.workload_port_group }}"
