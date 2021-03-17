@@ -88,7 +88,7 @@ For solution specifc features, check the relevant example directory.
 ## Docker Image Build
 From the root of the repo. Note no-cache flag used to force builds to pickup any changes to the Ansible repo.
 ```
-docker build --no-cache ./docker/ubuntu/. -t laidbackware/vsphere-ansible:latest
+docker build --no-cache ./docker/. -t laidbackware/vsphere-ansible:latest
 ```
 
 ## Local Usage
