@@ -21,10 +21,10 @@ opinionated:
   master_password: "VMware1!"
   number_of_hosts: 1 # number of ESXi VMs to deploy
   nested_hosts:
-    cpu_cores: 4 # CPU count per nested host
-    ram_in_gb: 32 # memory per nested host
+    cpu_cores: 8 # CPU count per nested host
+    ram_in_gb: 128 # memory per nested host
     local_disks: # (optional) this section can be removed to not modify local disks
-      - size_gb: 200
+      - size_gb: 500
         datastore_prefix: "datastore" # omit this to not have a datastore created
   hosting_cluster: Physical
   hosting_datastore: NVME
@@ -34,29 +34,22 @@ opinionated:
       cidr: "192.168.0.0/22"
       gateway: "192.168.0.1"
       # A NSX-T deployment requires 4 IPs, plus 1 per esxi host. They MUST be contiguous.
-      starting_addr: "192.168.0.120"
+      starting_addr: "192.168.1.10"
     nsxt_tep:
       port_group: TEP
       vlan_id: 0
-      cidr: "172.16.0.0/24" # IP calculation depends on this being a /24
+      cidr: "172.31.253.0/24" # IP calculation depends on this being a /24
   nsxt:
     tier0_gateway_name: test-t0
     tier1_gateways:
-      - display_name: test-t1-1
+      - display_name: infra-t1
         route_advertisement_types:
           - "TIER1_CONNECTED"
           - "TIER1_NAT"
         segments:
-          - display_name: test-seg-1
-            default_gateway_cidr: "172.20.0.1/24"
-      - display_name: test-t1-2
-        route_advertisement_types:
-          - "TIER1_CONNECTED"
-        segments:
-          - display_name: test-seg-2
-            default_gateway_cidr: "172.20.1.1/24"
-    standalone_overlay_segments:
-      - display_name: test-seg-3
+          - display_name: infra-seg
+            default_gateway_cidr: "172.30.0.1/24"
+
 
 #####################################################################
 ### No need to edit below this line for an opinionated deployment ###

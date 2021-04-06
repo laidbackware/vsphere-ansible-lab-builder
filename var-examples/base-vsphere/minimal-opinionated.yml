@@ -1,6 +1,6 @@
 # path to vCenter installer ISO
-vc_iso: "{{ lookup('env', 'SOFTWARE_DIR') }}/VMware-VCSA-all-7.0.1-17327517.iso"
-esxi_ova: "{{ lookup('env', 'SOFTWARE_DIR') }}/Nested_ESXi7.0.1_Appliance_Template_v1.ova"
+vc_iso: "{{ lookup('env', 'SOFTWARE_DIR') }}/VMware-VCSA-all-7.0.2-17694817.iso"
+esxi_ova: "{{ lookup('env', 'SOFTWARE_DIR') }}/Nested_ESXi7.0u2_Appliance_Template_v1.ova"
 
 environment_tag: "minimal" # Used to prepend object names
 dns_server: "192.168.0.110"
@@ -18,7 +18,7 @@ hosting_vcenter: # This is the vCenter which will be the target for nested vCent
 # This section is only referenced by other variables in this file
 opinionated:
   master_password: "VMware1!"
-  number_of_hosts: 2
+  number_of_hosts: 1
   nested_hosts:
     cpu_cores: 4 # CPU count
     ram_in_gb: 16 # memory

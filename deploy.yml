@@ -33,17 +33,17 @@
     - role: nsxt/nsxt-switching-routing
       when: 'nsxt is defined'
 
-    ### vSphere with Kubernetes Section
+    # vSphere with Kubernetes Section
+    - role: vsphere/vsphere-storage-based-policy-management
+      when: 'spbm is defined'
     - role: vsphere-tanzu/vsphere-content-library
-      when: 'tkgs is defined'
-    - role: vsphere-tanzu/vsphere-tag-datastore
-      when: 'tkgs is defined'
+      when: 'tanzu is defined'
     - role: vsphere-tanzu/tkgs-vyos-router
-      when: 'tkgs is defined and tkgs.router is defined'
+      when: 'tanzu is defined and tanzu.router is defined'
     - role: vsphere-tanzu/tkgs-ha-proxy
-      when: 'tkgs is defined'
+      when: 'tanzu is defined and tanzu.haproxy is defined'
     - role: vsphere-tanzu/tkgs-enable-cluster
-      when: 'tkgs is defined'
+      when: 'tanzu is defined'
      
     # Harbor section
     - role: harbor-vm

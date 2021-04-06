@@ -5,11 +5,11 @@
     username: "{{ nested_vcenter.username }}"
     password: "{{ nested_vcenter.password }}"
     validate_certs: False
-    library_name: "{{ tkgs.content_library_name }}"
+    library_name: "{{ tanzu.content_library_name }}"
     library_type: subscribed
-    subscription_url: "{{ tkgs.content_library_url }}"
+    subscription_url: "{{ tanzu.content_library_url }}"
     update_on_demand: True
-    ssl_thumbprint: "{{ tkgs.content_library_thumbprint | default(omit) }}"
-    datastore_name: "{{ tkgs.datastore_to_tag }}"
+    ssl_thumbprint: "{{ tanzu.content_library_thumbprint | default(omit) }}"
+    datastore_name: "{{ tanzu.content_library_datastore }}"
     state: present
   delegate_to: localhost

@@ -7,13 +7,13 @@
     validate_certs: no
     name: "tkgs-haproxy"
     datacenter: "{{ nested_vcenter.datacenter }}"
-    cluster: "{{ tkgs.vsphere_cluster }}"
-    datastore: "{{ tkgs.datastore_to_tag }}"
+    cluster: "{{ tanzu.vsphere_cluster }}"
+    datastore: "{{ tanzu.haproxy.datastore }}"
     disk_provisioning: "{{ disk_mode }}"
     networks:  
-      Management: "{{ tkgs.haproxy.management_port_group }}"
-      Workload: "{{ tkgs.haproxy.workload_port_group }}"
-      Frontend: "{{ tkgs.haproxy.workload_port_group }}"
+      Management: "{{ tanzu.management_port_group }}"
+      Workload: "{{ tanzu.vsphere_networking.workload_port_group }}"
+      Frontend: "{{ tanzu.vsphere_networking.workload_port_group }}"
     ova: "{{ lookup('env', 'SOFTWARE_DIR') }}/vmware-haproxy-v0.1.8.ova" 
     allow_duplicates: no
     power_on: yes
@@ -22,13 +22,13 @@
     wait_for_ip_address: yes
     inject_ovf_env: yes
     properties:
-      appliance.root_pwd: "{{ tkgs.haproxy.root_pwd }}"
-      network.nameservers: "{{ tkgs.haproxy.nameservers }} "
-      network.management_ip: "{{ tkgs.haproxy.management_ip }}"
-      network.management_gateway: "{{ tkgs.haproxy.management_gateway }}"
-      network.workload_ip: "{{ tkgs.haproxy.workload_ip }}"
-      network.workload_gateway: "{{ tkgs.haproxy.workload_gateway }}"
-      loadbalance.service_ip_range: "{{ tkgs.haproxy.service_ip_range }}"
-      loadbalance.haproxy_user: "{{ tkgs.haproxy.username }}"
-      loadbalance.haproxy_pwd:  "{{ tkgs.haproxy.password }}"
-      loadbalance.dataplane_port: "{{ tkgs.haproxy.management_port | default(omit) }}"
+      appliance.root_pwd: "{{ tanzu.haproxy.root_pwd }}"
+      network.nameservers: "{{ tanzu.haproxy.nameservers }} "
+      network.management_ip: "{{ tanzu.haproxy.management_ip }}/{{ tanzu.haproxy.management_subnet_bits }}"
+      network.management_gateway: "{{ tanzu.haproxy.management_gateway }}"
+      network.workload_ip: "{{ tanzu.haproxy.workload_ip }}"
+      network.workload_gateway: "{{ tanzu.haproxy.workload_gateway }}"
+      loadbalance.service_ip_range: "{{ tanzu.haproxy.service_ip_range }}"
+      loadbalance.haproxy_user: "{{ tanzu.haproxy.username }}"
+      loadbalance.haproxy_pwd:  "{{ tanzu.haproxy.password }}"
+      loadbalance.dataplane_port: "{{ tanzu.haproxy.management_port | default(omit) }}"

@@ -19,7 +19,7 @@
     ova: "{{ esxi_ova }}" 
     allow_duplicates: no
     power_on: no
-    fail_on_spec_warnings: yes
+    fail_on_spec_warnings: no
     wait: yes
     wait_for_ip_address: no
     inject_ovf_env: yes
