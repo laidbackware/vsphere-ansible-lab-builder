@@ -268,7 +268,7 @@
       timeout: 30
 
   always:
-  - name: Use the registered var and the file module to remove the temporary file
+  - name: Remove the temp directory
     file:
       path: "{{ tmp_dir }}"
       state: absent

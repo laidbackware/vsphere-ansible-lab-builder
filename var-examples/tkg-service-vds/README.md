@@ -21,10 +21,7 @@ first ESXi host = `hosting_network.base.starting_addr + 8`<br/>
 
 # Roadmap
 - Add multi host option
-- Add more debug statements to show config ahead of each task
-- Add output at the end to show IPs of all deployed objects
-- Add support in role haproxy for 3 network topology
-- Add checks for common errors
+- Add support for NSX-T Advanced Load Balancer instead of Haproxy
 - Add functionality to check and apply updates
 - Add ability to shrink to 2 supervisors
   https://www.virtuallyghetto.com/2020/04/deploying-a-minimal-vsphere-with-kubernetes-environment.html

@@ -1,4 +1,4 @@
-# vsphere-ansible-lab-builder
+# vmware-lab-builder
 Build a nested vSphere lab with Ansible
 
 ## Description
@@ -45,7 +45,7 @@ docker run --rm \
     --env NSXT_LICENSE_KEY=${NSXT_LICENSE_KEY:-na} \
     --volume ${SOFTWARE_DIR}:/software_dir \
     --volume ${PWD}:/work \
-    laidbackware/vsphere-ansible:v2 \
+    laidbackware/vmware-lab-builder:v2 \
     ansible-playbook /work/deploy.yml \
         --extra-vars '@/work/var-examples/base-vsphere/minimal-opinionated.yml'
 ```
@@ -66,7 +66,7 @@ docker run  -it --rm \
     --env NSXT_LICENSE_KEY=${NSXT_LICENSE_KEY} \
     --volume ${SOFTWARE_DIR}:/software_dir \
     --volume ${PWD}:/work \
-    laidbackware/vsphere-ansible:v2 \
+    laidbackware/vmware-lab-builder:v2 \
     /bin/bash
 
 # Then the playbook can be triggered
@@ -88,7 +88,7 @@ For solution specifc features, check the relevant example directory.
 ## Docker Image Build
 From the root of the repo. Note no-cache flag used to force builds to pickup any changes to the git repos.
 ```
-docker build --no-cache ./docker/. -t laidbackware/vsphere-ansible:v2
+docker build --no-cache ./docker/. -t laidbackware/vmware-lab-builder:v2
 ```
 
 ## Local Usage

@@ -19,7 +19,7 @@ function run_playbook() {
     --env action=${action} \
     --volume ${SOFTWARE_DIR}:/software_dir \
     --volume ${script_dir}:/work \
-    laidbackware/vsphere-ansible:v2 \
+    laidbackware/vmware-lab-builder:v1 \
     ansible-playbook /work/${action}.yml \
         --extra-vars '@/work/var-examples/${vars_file}.yml'
 
@@ -42,10 +42,10 @@ function run_test() {
 }
 
 function test_opinionated_examples() {
-  run_test base-vsphere/minimal-opinionated
-  run_test nsxt/opinionated
-  run_test vsphere-tanzu-vds/opinionated-1host-haproxy
-  run_test vsphere-tanzu-nsxt/opinionated-1host
+  # run_test base-vsphere/minimal-opinionated
+  # run_test nsxt/opinionated
+  run_test tkg-service-vds/opinionated-1host-haproxy
+  run_test tkg-service-nsxt/opinionated-1host
 }
 
 test_opinionated_examples

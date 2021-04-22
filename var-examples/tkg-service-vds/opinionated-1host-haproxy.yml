@@ -1,8 +1,8 @@
-# path to vCenter installer ISO
+# SOFTWARE_DIR must contain all required software
 vc_iso: "{{ lookup('env', 'SOFTWARE_DIR') }}/VMware-VCSA-all-7.0.2-17694817.iso"
 esxi_ova: "{{ lookup('env', 'SOFTWARE_DIR') }}/Nested_ESXi7.0u2_Appliance_Template_v1.ova"
 
-environment_tag: "tkgs" # Used to prepend object names
+environment_tag: "tkgs" # Used to prepend object names in hosting vCenter
 dns_server: "192.168.0.110"
 dns_domain: "home.local"
 ntp_server_ip: "192.168.0.1"
@@ -42,7 +42,7 @@ opinionated:
       vlan_id: 0
       cidr: "172.31.0.0/24"
       gateway: "172.31.0.1"
-  tanzu:
+  tkg_service:
     # This network is private and should not overlap with any routeable networks 
     internal_kubernetes_services_network: 172.20.8.0/22
 
@@ -135,8 +135,8 @@ tspbm: # Tag-based Storage Policy Based Management
       tag_name: tkgs-storage-tag
       tag_category: tkgs-storage-category
 
-tanzu:
-  cluster_ip_services_cidr: "{{ opinionated.tanzu.internal_kubernetes_services_network }}" # This will not be routed and is private within each cluster
+tkg_service:
+  cluster_ip_services_cidr: "{{ opinionated.tkg_service.internal_kubernetes_services_network }}" # This will not be routed and is private within each cluster
   cluster_ip_services_cidr: "10.255.255.0/24" # This will not be routed and is private within each cluster
   content_library_datastore: "{{ opinionated.nested_hosts.local_disks[0].datastore_prefix }}-esx1"
   content_library_name: tkgs-library
@@ -174,25 +174,25 @@ tanzu:
     workload_netmask: "{{ opinionated.hosting_network.workload.cidr | ansible.netcommon.ipaddr('netmask') }}"
     workload_port_group: workload-pg
 
-  router:
-    datastore: "{{ opinionated.nested_hosts.local_disks[0].datastore_prefix }}-esx1"
-    internal_gateway_cidr: "{{ opinionated.hosting_network.workload.gateway }}/{{ opinionated.hosting_network.workload.cidr.split('/')[1] }}"
-    internal_network_cidr: "{{ opinionated.hosting_network.workload.cidr }}"
-    uplink_ip_cidr: "{{ opinionated.hosting_network.base.starting_addr | ipmath(1) }}/{{ opinionated.hosting_network.base.cidr.split('/')[1] }}"
-    uplink_next_hop: "{{ opinionated.hosting_network.base.gateway }}"
+tkg_router:
+  datastore: "{{ opinionated.nested_hosts.local_disks[0].datastore_prefix }}-esx1"
+  internal_gateway_cidr: "{{ opinionated.hosting_network.workload.gateway }}/{{ opinionated.hosting_network.workload.cidr.split('/')[1] }}"
+  internal_network_cidr: "{{ opinionated.hosting_network.workload.cidr }}"
+  uplink_ip_cidr: "{{ opinionated.hosting_network.base.starting_addr | ipmath(1) }}/{{ opinionated.hosting_network.base.cidr.split('/')[1] }}"
+  uplink_next_hop: "{{ opinionated.hosting_network.base.gateway }}"
 
-  haproxy:
-    username: admin
-    password: "{{ opinionated.master_password }}"
-    root_pwd: "{{ opinionated.master_password }}"
-    datastore: "{{ opinionated.nested_hosts.local_disks[0].datastore_prefix }}-esx1"
-    management_ip: "{{ opinionated.hosting_network.base.starting_addr | ipmath(2) }}"
-    management_subnet_bits: "{{ opinionated.hosting_network.base.cidr.split('/')[1] }}"
-    management_port: "5556"
-    management_gateway: "{{ opinionated.hosting_network.base.gateway }}"
-    management_port_group: vm-network
-    nameservers: "{{ dns_server }}"
-    # Line below will create a cidr of the third quarter of opinionated.hosting_network.workload.cidr
-    service_ip_range: "{{ opinionated.hosting_network.workload.cidr | ansible.netcommon.ipsubnet((opinionated.hosting_network.workload.cidr.split('/')[1] |int)+1, 1) }}" # Can be comma separated
-    workload_ip: "{{ opinionated.hosting_network.workload.cidr | ipmath(2) }}/{{ opinionated.hosting_network.workload.cidr.split('/')[1] }}"
-    workload_gateway: "{{ opinionated.hosting_network.workload.gateway }}"
+tkg_haproxy:
+  username: admin
+  password: "{{ opinionated.master_password }}"
+  root_pwd: "{{ opinionated.master_password }}"
+  datastore: "{{ opinionated.nested_hosts.local_disks[0].datastore_prefix }}-esx1"
+  management_ip: "{{ opinionated.hosting_network.base.starting_addr | ipmath(2) }}"
+  management_subnet_bits: "{{ opinionated.hosting_network.base.cidr.split('/')[1] }}"
+  management_port: "5556"
+  management_gateway: "{{ opinionated.hosting_network.base.gateway }}"
+  management_port_group: vm-network
+  nameservers: "{{ dns_server }}"
+  # Line below will create a cidr of the third quarter of opinionated.hosting_network.workload.cidr
+  service_ip_range: "{{ opinionated.hosting_network.workload.cidr | ansible.netcommon.ipsubnet((opinionated.hosting_network.workload.cidr.split('/')[1] |int)+1, 1) }}" # Can be comma separated
+  workload_ip: "{{ opinionated.hosting_network.workload.cidr | ipmath(2) }}/{{ opinionated.hosting_network.workload.cidr.split('/')[1] }}"
+  workload_gateway: "{{ opinionated.hosting_network.workload.gateway }}"

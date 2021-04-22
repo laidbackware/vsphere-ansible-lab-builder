@@ -1,6 +1,6 @@
 ---
 
-- debug: msg="{{tkgs}}"
+- debug: msg="{{tkg_service}}"
 
 - name: Deploy VYoS
   community.vmware.vmware_deploy_ovf:
@@ -10,12 +10,12 @@
     validate_certs: no
     name: "tkgs-vyos-router"
     datacenter: "{{ nested_vcenter.datacenter }}"
-    cluster: "{{ tanzu.vsphere_cluster }}"
-    datastore: "{{ tanzu.router.datastore }}"
+    cluster: "{{ tkg_service.vsphere_cluster }}"
+    datastore: "{{ tkg_router.datastore }}"
     disk_provisioning: "{{ disk_mode }}"
     networks:  
-      public: "{{ tanzu.management_port_group }}"
-      internal: "{{ tanzu.vsphere_networking.workload_port_group }}"
+      public: "{{ tkg_service.management_port_group }}"
+      internal: "{{ tkg_service.vsphere_networking.workload_port_group }}"
     ova: "{{ lookup('env', 'SOFTWARE_DIR') }}/vyos-1.1.8-amd64.ova" 
     allow_duplicates: no
     power_on: yes
@@ -39,13 +39,13 @@
       -c "source /opt/vyatta/etc/functions/script-template
       configure
       delete interfaces ethernet eth0 address dhcp
-      set interfaces ethernet eth0 address '{{ tanzu.router.uplink_ip_cidr }}'
-      set interfaces ethernet eth1 address '{{ tanzu.router.internal_gateway_cidr }}'
+      set interfaces ethernet eth0 address '{{ tkg_router.uplink_ip_cidr }}'
+      set interfaces ethernet eth1 address '{{ tkg_router.internal_gateway_cidr }}'
       set service ssh port '22'
-      set protocols static route 0.0.0.0/0 next-hop {{ tanzu.router.uplink_next_hop }} distance '1'
+      set protocols static route 0.0.0.0/0 next-hop {{ tkg_router.uplink_next_hop }} distance '1'
 
       set nat source rule 100 outbound-interface 'eth0'
-      set nat source rule 100 source address '{{ tanzu.router.internal_network_cidr }}'
+      set nat source rule 100 source address '{{ tkg_router.internal_network_cidr }}'
       set nat source rule 100 translation address masquerade
 
       commit

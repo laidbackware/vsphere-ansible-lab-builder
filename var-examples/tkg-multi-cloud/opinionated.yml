@@ -1,8 +1,8 @@
-# path to vCenter installer ISO
+# SOFTWARE_DIR must contain all required software
 vc_iso: "{{ lookup('env', 'SOFTWARE_DIR') }}/VMware-VCSA-all-7.0.2-17694817.iso"
 esxi_ova: "{{ lookup('env', 'SOFTWARE_DIR') }}/Nested_ESXi7.0u2_Appliance_Template_v1.ova"
 
-environment_tag: "tkgs" # Used to prepend object names
+environment_tag: "tkgs" # Used to prepend object names in hosting vCenter
 dns_server: "192.168.0.110"
 dns_domain: "home.local"
 ntp_server_ip: "192.168.0.1"
@@ -115,7 +115,7 @@ distributed_switches: # To not create any distributed switches, comment this sec
       - port_group_name: workload-pg
         vlan_id: "{{ opinionated.hosting_network.workload.vlan_id |default(0) }}"
 
-harbor:
+harbor-standalone:
   ip: "{{ opinionated.hosting_network.base.starting_addr | ipmath(5) }}" # harbor ip address
   hosting_network: "{{ opinionated.hosting_network.base.port_group }}" # Parent port group where the vCenter VM will be deployed
   hosting_network_cidr: "{{ opinionated.hosting_network.base.cidr }}" # Parent port group where the vCenter VM will be deployed
