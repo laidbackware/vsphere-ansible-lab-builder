@@ -3,7 +3,7 @@ vc_iso: "{{ lookup('env', 'SOFTWARE_DIR') }}/VMware-VCSA-all-7.0.2-17694817.iso"
 esxi_ova: "{{ lookup('env', 'SOFTWARE_DIR') }}/Nested_ESXi7.0u2_Appliance_Template_v1.ova"
 
 environment_tag: "tkgs" # Used to prepend object names in hosting vCenter
-dns_server: "192.168.0.110"
+dns_server: "192.168.0.1"
 dns_domain: "home.local"
 ntp_server_ip: "192.168.0.1"
 disk_mode: thin #How all disks should be deployed
@@ -21,7 +21,7 @@ opinionated:
   master_password: "VMware1!"
   number_of_hosts: 1 # number of ESXi VMs to deploy
   nested_hosts:
-    cpu_cores: 6 # CPU count per nested host
+    cpu_cores: 10 # CPU count per nested host
     ram_in_gb: 96 # memory per nested host
     local_disks: # (optional) this section can be removed to not modify local disks
       - size_gb: 400

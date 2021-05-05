@@ -72,6 +72,7 @@
     msg:
       - The next step will check and wait for NSX-T networks to be available
       - You must add a static route to {{ nsxt.routing_test.nsxt_supernet }} with next hop {{ nsxt.routing_test.router_uplink }}
+      - It may take a short while for NSX-T to complete the configuration and respond
   when: "nsxt.routing_test is defined"
 
 - name: Checking static route to NSX-T is in place by pinging {{ nsxt.routing_test.ip_to_ping }}

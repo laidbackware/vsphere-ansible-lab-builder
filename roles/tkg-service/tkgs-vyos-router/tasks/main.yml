@@ -1,6 +1,6 @@
 ---
 
-- debug: msg="{{tkg_service}}"
+- debug: msg="{{tkg_router}}"
 
 - name: Deploy VYoS
   community.vmware.vmware_deploy_ovf:

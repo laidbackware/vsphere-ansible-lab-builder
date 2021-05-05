@@ -1,4 +1,7 @@
 ---
+
+- debug: msg="{{tkg_haproxy}}"
+
 - name: Deploy HA Proxy
   community.vmware.vmware_deploy_ovf:
     hostname: "{{ nested_vcenter.ip }}"

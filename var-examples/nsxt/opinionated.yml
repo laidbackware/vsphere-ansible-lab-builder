@@ -4,7 +4,7 @@ esxi_ova: "{{ lookup('env', 'SOFTWARE_DIR') }}/Nested_ESXi7.0u2_Appliance_Templa
 nsxt_ova: "{{ lookup('env', 'SOFTWARE_DIR') }}/nsx-unified-appliance-3.1.1.0.0.17483186.ova"
 
 environment_tag: "nsxt" # Used to prepend object names in hosting vCenter
-dns_server: "192.168.0.110"
+dns_server: "192.168.0.1"
 dns_domain: "home.local"
 ntp_server_ip: "192.168.0.1" # Must be set to an IP address!
 disk_mode: thin # How all disks should be deployed
